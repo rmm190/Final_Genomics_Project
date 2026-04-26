@@ -57,7 +57,7 @@ Additionally, the trimmed files need to be put in the bucket after they're check
 ## Step 6: Align Cleaned Reads to Human Genome with Bowtie2 and Samtools
 
 # Build human genome index
-
+```
 #Download human genome 
 wget https://ftp.ebi.ac.uk/pub/databases/ena/wgs/public/hg38/GRCh38.fa.gz
 
@@ -70,9 +70,9 @@ srun --pty --cpus-per-task=8 --mem=16G --time=02:00:00 bash
 #Load module and build index
 module load bowtie2
 bowtie2-build GRCh38.fa /home/jm3448/Final/bowtie2/GRCh38
-
+```
 # Run Bowtie2 and Samtools
-
+```
 #Bowtie2 script
 #!/bin/bash
 #SBATCH --job-name=human_filter
@@ -103,7 +103,7 @@ samtools fastq \
 -1 nonhuman_R1.fastq.gz \
 -2 nonhuman_R2.fastq.gz \
 unmapped.bam
-
+```
 The files produced should be: 
 aligned.bam	(all reads--mapped + unmapped)	
 unmapped.bam	(non-human reads)
@@ -113,11 +113,13 @@ nonhuman_R2.fastq.gz	(filtered reverse reads)
 ## Step 7: Classify non-human reads against a reference genome database with Kraken2
 
 # Install Kraken database on login node
+```
 conda create -n kraken_env -c bioconda kraken2
 conda activate kraken_env
+```
 
 # Run Kraken2
-
+```
 #Kraken2 script
 #!/bin/bash
 #SBATCH --job-name=kraken2
@@ -147,19 +149,19 @@ kraken2 \
 $R1 $R2 \
 --report $OUTDIR/kraken_report.txt \
 --output $OUTDIR/kraken_output.txt
-
+```
 The file produced should be: 
 kraken_report.txt
 
 # Upload Kraken2 report to the bucket
-
+```
 gsutil cp /home/jm3448/Final/kraken_out/kraken_report.txt \
 gs://gu-biology-dept-class/jm3448/
-
+```
 ## Analyze Diversity Metrics of Kraken Report using RStudio
 
 # R Analysis 
-
+```
 setwd("~/Downloads")
 
 kraken <- read.table(
@@ -177,17 +179,17 @@ genus <- subset(kraken, rank == "G")
 
 abundance <- genus$reads
 names(abundance) <- genus$name
-
+```
 # Produce Diversity Metrics
-
+```
 library(vegan)
 
 shannon <- diversity(abundance, index="shannon")
 simpson <- diversity(abundance, index="simpson")
 richness <- specnumber(abundance)
-
+```
 # Visualize Data
-
+```
 rel_abundance <- abundance / sum(abundance)
 top10 <- sort(rel_abundance, decreasing=TRUE)[1:10]
 
@@ -200,6 +202,6 @@ barplot(
   main="Top 10 Genera (Relative Abundance)",
   ylab="Proportion"
 )
-
+```
 **Result Files in ReadMe**
 
