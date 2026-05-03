@@ -31,7 +31,6 @@ fastqc -h
 mkdir -p fastqc_out
 
 #Run FastQC. The -o line tells the program to put the .html and .zip outputs into your output directory
-fastqc -o fastqc_out SRR6996006.sra_1.fastq.gz SRR6996006.sra_2.fastq.gz
 ```
 The files produced should be:
 yourfile_fastqc.html
@@ -48,7 +47,7 @@ srun --pty bash
 module load fastqc
 fastqc -h
 mkdir -p fastqc_out
-fastqc -o fastqc_out SRR*
+fastqc -o fastqc_out Control*
 ```
 Additionally, the trimmed files need to be put in the bucket after they're checked with FastQC.
 
