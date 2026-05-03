@@ -51,7 +51,6 @@ fastqc -o fastqc_out Control*
 ```
 Additionally, the trimmed files need to be put in the bucket after they're checked with FastQC.
 
-**Result Files in ReadMe**
 
 ## Step 6: Align Cleaned Reads to Human Genome with Bowtie2 and Samtools
 
