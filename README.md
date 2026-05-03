@@ -7,8 +7,9 @@ As part of this bioinformatics workflow, we analyzed fecal microbiome samples fr
 See MasterNotes.md for goals and code. The following README contains our accompanying results figures. 
 
 **Stacked Relative Abundance of Top Genera**
-<img width="1126" height="1156" alt="image" src="https://github.com/user-attachments/assets/4f647492-2e5a-4e4c-8bf1-323562c57f40" />
+<img width="563" height="578" alt="image" src="https://github.com/user-attachments/assets/f3a7d9c3-4ee5-4e5f-ad18-57cada56f95a" />
+
 
 **Richness, Shannon Diversity, and Simpson Index Diversity Measures**
-<img width="1126" height="1156" alt="image" src="https://github.com/user-attachments/assets/ca3e9d3b-c050-40b8-a3c2-3211cc4ab02d" />
+<img width="563" height="578" alt="image" src="https://github.com/user-attachments/assets/ca3e9d3b-c050-40b8-a3c2-3211cc4ab02d" />
 
