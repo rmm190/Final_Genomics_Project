@@ -179,6 +179,81 @@ genus <- subset(kraken, rank == "G")
 
 abundance <- genus$reads
 names(abundance) <- genus$name
+
+# Install package (run once if needed)
+install.packages("tidyverse")
+
+# Load library
+library(tidyverse)
+
+# ---------------------------
+# Step 1: Create data
+# ---------------------------
+
+control <- data.frame(
+  Genus = c("Bacteroides","Phocaeicola","Faecalibacterium","Agathobacter",
+            "Alistipes","Parabacteroides","Klebsiella","Dialister",
+            "Mediterraneibacter","Roseburia"),
+  Abundance = c(0.30,0.19,0.14,0.048,0.042,0.036,0.030,0.025,0.022,0.018),
+  Group = "Control"
+)
+
+severe <- data.frame(
+  Genus = c("Bacteroides","Phocaeicola","Roseburia","Phascolarctobacterium",
+            "Parabacteroides","Faecalibacterium","Sinaaca","Lachnospira",
+            "Bifidobacterium","Haemophilus"),
+  Abundance = c(0.57,0.29,0.025,0.025,0.015,0.015,0.010,0.008,0.007,0.005),
+  Group = "Severe"
+)
+
+mild <- data.frame(
+  Genus = c("Segatella","Bacteroides","Phocaeicola","Faecalibacterium",
+            "Parabacteroides","Alistipes","Dialister","Roseburia",
+            "Agathobacter","Butyricimonas"),
+  Abundance = c(0.81,0.10,0.025,0.020,0.015,0.012,0.010,0.009,0.008,0.007),
+  Group = "Mild"
+)
+
+# ---------------------------
+# Step 2: Combine datasets
+# ---------------------------
+
+df <- bind_rows(control, severe, mild)
+
+# Fill missing genera with 0
+df_complete <- df %>%
+  complete(Genus, Group, fill = list(Abundance = 0))
+
+# ---------------------------
+# Step 3: Order by Control abundance
+# ---------------------------
+
+genus_order <- df_complete %>%
+  filter(Group == "Control") %>%
+  arrange(desc(Abundance)) %>%
+  pull(Genus)
+
+# Add genera not present in Control to the end
+genus_order <- c(genus_order,
+                 setdiff(unique(df_complete$Genus), genus_order))
+
+# Apply ordering
+df_complete$Genus <- factor(df_complete$Genus, levels = genus_order)
+
+# ---------------------------
+# Step 4: Plot
+# ---------------------------
+
+ggplot(df_complete, aes(x = Genus, y = Abundance, fill = Group)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = c("Control" = "green",
+                               "Severe" = "red",
+                               "Mild" = "blue")) +
+  labs(title = "Stacked Relative Abundance of Top Genera",
+       x = "Genus",
+       y = "Proportion") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 # Produce Diversity Metrics
 ```
@@ -190,18 +265,53 @@ richness <- specnumber(abundance)
 ```
 # Visualize Data
 ```
-rel_abundance <- abundance / sum(abundance)
-top10 <- sort(rel_abundance, decreasing=TRUE)[1:10]
+# Install if needed
+install.packages("tidyverse")
 
-par(mar=c(10,4,4,2))
+# Load
+library(tidyverse)
 
-barplot(
-  top10,
-  las=2,
-  col="darkgreen",
-  main="Top 10 Genera (Relative Abundance)",
-  ylab="Proportion"
+# ---------------------------
+# Create data
+# ---------------------------
+
+df <- data.frame(
+  Metric = rep(c("Richness", "Shannon Diversity", "Simpson Index"), each = 3),
+  Group = rep(c("Control", "Mild", "Severe"), times = 3),
+  Value = c(
+    2662, 56, 1507,
+    2.627657, 0.9137039, 1.27922,
+    0.8408519, 0.782076, 0.5761584
+  )
 )
+
+# ---------------------------
+# Plot
+# ---------------------------
+
+ggplot(df, aes(x = Group, y = Value, fill = Group)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  
+  facet_wrap(~Metric, scales = "free_y") +
+  
+  scale_fill_manual(values = c(
+    "Control" = "darkgreen",
+    "Mild" = "blue",
+    "Severe" = "red"
+  )) +
+  
+  labs(
+    title = "Microbial Diversity Metrics Across Groups",
+    x = "",
+    y = "Value"
+  ) +
+  
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(face = "bold"),
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
 ```
 **Result Files in ReadMe**
 
