@@ -37,7 +37,7 @@ yourfile_fastqc.html
 yourfile_fastqc.zip
 ```
 ## Step 4: Run Trimmomatic on the files.
-Running trimmomatic is necessary to remove adapters and to trim low quality bases. The quality of reads often tails off at the end of our reads (as evidenced from our initial FastQC analysis. Trimmomatic will remove those while also getting rid of reads that are simply too short for our future needs.
+Running trimmomatic is necessary to remove adapters and to trim low quality bases. The quality of reads often tails off at the end of our reads (as evidenced from our initial FastQC analysis). Trimmomatic will remove those while also getting rid of reads that are simply too short for our future needs.
 
 ## Step 5: FastQC of clean data:
 
