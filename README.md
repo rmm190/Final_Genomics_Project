@@ -6,7 +6,7 @@ As part of this bioinformatics workflow, we analyzed fecal microbiome samples fr
 
 Here is a citation for the Li et al. (2021) study: Li, S., Yang, S., Zhou, Y., Disoma, C., Dong, Z., Du, A., ... & Xia, Z. (2021). Microbiome profiling using shotgun metagenomic sequencing identified unique microorganisms in COVID-19 patients with altered gut microbiota. Frontiers in microbiology, 12, 712081.
 
-See MasterNotes.md for goals and code. The following README contains our accompanying results figures. 
+See MasterNotes.md for goals and code. The following README contains our accompanying results figures that we included in our final writeup.
 
 **Relative Abundance of Top Genera Across COVID-19 Groups**
 <img width="563" height="578" alt="image" src="https://github.com/user-attachments/assets/f3a7d9c3-4ee5-4e5f-ad18-57cada56f95a" />
