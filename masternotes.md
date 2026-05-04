@@ -23,6 +23,7 @@ cd raw
 ## Step 3: Running FastQC of your raw data
 
 # FastQC of raw data. This will evaluate the baseline state of our DNA so that we can make decisions about how to clean it later in our workflow.
+
 # Enter interactive mode on a compute node (from where you are)
 srun --pty bash
 
