@@ -4,7 +4,9 @@ The goal of this project is to perform a bioinformatics workflow, similar to a s
 **All of the following code is shown for the "Control" group. It was repeated in the same way using the representative data for the "Mild" and "Severe" group**
 
 ## Step 1: Downloading our fastq files.
+#We placed all fastq files obtained from the Li et al. study in the bucket.
 
+gsutil cp gs://gu-biology-dept-class/jm3448/Control1.fastq.gz
 
 ## Step 2: Getting organized to set ourselves up for success throughout our workflow
 ```
