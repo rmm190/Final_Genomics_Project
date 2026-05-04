@@ -1,17 +1,17 @@
 # What is the goal of this project?
 The goal of this project is to perform a bioinformatics workflow, similar to a study performed by Li et al. 2021, in order to analyze how the diversity and compostion of the gut microbiome varies with COVID-19 disease severity. To accomplish this, 3 representative fecal samples were studied: one healthy control, and two COVID-19 patients of mild and severe disease severity.  We aim to replicate and adjust the workflow of Li et al. 2021 in order to both evaluate these patterns in gut microbial composition associated with COVID 19 infection and to become more comfortable using common bioinformatics tools. 
 
-**All of the following code is shown for the "Control" group. It was replicated using the representative data for the "Mild" and "Severe" group**
+**All of the following code is representative. The same protocol and workflow was applied to all of the samples tested.***
 
 ## Step 1: Downloading our fastq files.
 #We placed all fastq files obtained from the Li et al. study in the bucket.
-
-gsutil cp gs://gu-biology-dept-class/jm3448/Control1.fastq.gz
-
-## Step 2: Getting organized to set ourselves up for success throughout our workflow
 ```
+gsutil cp gs://gu-biology-dept-class/jm3448/Control1.fastq.gz
+```
+## Step 2: Getting organized to set ourselves up for success throughout our workflow
 # Make directories for file organization, change into directory for raw files. Move raw files into the correct directory.
 
+```
 mkdir fastq 
 cd fastqfiles
 mkdir raw
@@ -23,7 +23,7 @@ cd raw
 ## Step 3: Running FastQC of your raw data
 
 # FastQC of raw data. This will evaluate the baseline state of our DNA so that we can make decisions about how to clean it later in our workflow.
-
+```
 # Enter interactive mode on a compute node (from where you are)
 srun --pty bash
 
@@ -37,14 +37,41 @@ fastqc -h
 mkdir -p fastqc_out
 
 #Run FastQC. The -o line tells the program to put the .html and .zip outputs into your output directory
+fastqc -o fastqc_out control.sra_1.fastq.gz control.sra_2.fastq.gz
 ```
 The files produced should be:
 yourfile_fastqc.html
 yourfile_fastqc.zip
-```
+
 ## Step 4: Run Trimmomatic on the files.
 Running trimmomatic is necessary to remove adapters and to trim low quality bases. The quality of reads often tails off at the end of our reads (as evidenced from our initial FastQC analysis). Trimmomatic will remove those while also getting rid of reads that are simply too short for our future needs.
+```
+#SBATCH --mail-type=END,FAIL --mail-user=rmm190@georgetown.edu
+#SBATCH --job-name="trim_S1"
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --time=03:00:00
+#SBATCH --mem=10G
 
+#Load Trimmomatic module ("aliases" needed for GU HPC setup here)
+shopt -s expand_aliases
+module load trimmomatic
+
+#Define paths and variables
+R1=/home/rmm190/final_project/raw_reads/Mild1.fastq.gz
+R2=/home/rmm190/final_project/raw_reads/Mild2.fastq.gz
+OUTDIR=/home/rmm190/final_project/trim_out
+mkdir -p $OUTDIR
+
+trimmomatic PE -threads $SLURM_CPUS_PER_TASK \
+$R1 $R2 \
+$OUTDIR/Mild_1_paired.fq.gz $OUTDIR/Mild_1_unpaired.fq.gz \
+$OUTDIR/Mild_2_paired.fq.gz $OUTDIR/Mild_2_unpaired.fq.gz \
+ILLUMINACLIP:$HOME/rmm190/TruSeq3-PE.fa:2:30:10 \
+LEADING:10 TRAILING:10 SLIDINGWINDOW:4:15 MINLEN:75
+
+```
 ## Step 5: FastQC of clean data:
 
 ```
@@ -59,8 +86,10 @@ Additionally, the trimmed files need to be put in the bucket after they're check
 
 
 ## Step 6: Align Cleaned Reads to Human Genome with Bowtie2 and Samtools
+The purpose of this step is to match human DNA present within the samples to a humman reference genome to remove it from our analyses. We're focused on the gut microbiome, and having human DNA present will inhibit our ability to analyze exclusively the gut microbiome. Bowtie2 is specifically for aligning the human reads to the human reference genome, and Samtools is for removing those human reads. At the end of this step, we want to keep the unmapped reads which represent the microbial DNA. 
 
 # Build human genome index
+This step produces a searchable genome that enables a more efficinet search of the human genome. 
 ```
 #Download human genome 
 wget https://ftp.ebi.ac.uk/pub/databases/ena/wgs/public/hg38/GRCh38.fa.gz
@@ -115,6 +144,7 @@ nonhuman_R1.fastq.gz	(filtered forward reads)
 nonhuman_R2.fastq.gz	(filtered reverse reads)	
 
 ## Step 7: Classify non-human reads against a reference genome database with Kraken2
+The purpose of this step is to identify the organisms that are present in our sample. Kraken2 works specifically by breaking reads into k-mers and then comparing these pieces against a known reference database to match reads to taxonomies present.
 
 # Install Kraken database on login node
 ```
