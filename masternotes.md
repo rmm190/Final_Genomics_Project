@@ -1,7 +1,7 @@
 # What is the goal of this project?
-The goal of this project is to perform a bioinformatics workflow, similar to a study performed by Li et al. 2021, in order to analyze how the diversity and compostion of the gut microbiome varies with COVID-19 disease severity. To accomplish this, 3 representative fecal samples across three groups, Control, Mild and Severe COVID-19 patients, were used. We aim to replicate and adjust the workflow of Li et al. 2021 in order to both evaluate these patterns in gut microbial composition associated with COVID 19 infection and to become more comfortable using common bioinformatics tools. 
+The goal of this project is to perform a bioinformatics workflow, similar to a study performed by Li et al. 2021, in order to analyze how the diversity and compostion of the gut microbiome varies with COVID-19 disease severity. To accomplish this, 3 representative fecal samples were studied: one healthy control, and two COVID-19 patients of mild and severe disease severity.  We aim to replicate and adjust the workflow of Li et al. 2021 in order to both evaluate these patterns in gut microbial composition associated with COVID 19 infection and to become more comfortable using common bioinformatics tools. 
 
-**All of the following code is shown for the "Control" group. It was repeated in the same way using the representative data for the "Mild" and "Severe" group**
+**All of the following code is shown for the "Control" group. It was replicated using the representative data for the "Mild" and "Severe" group**
 
 ## Step 1: Downloading our fastq files.
 #We placed all fastq files obtained from the Li et al. study in the bucket.
