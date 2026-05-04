@@ -193,6 +193,7 @@ gsutil cp /home/jm3448/Final/kraken_out/kraken_report.txt \
 gs://gu-biology-dept-class/jm3448/
 ```
 ## Analyze Diversity Metrics of Kraken Report using RStudio
+R studio is an important tool for visualizing different diversity metrics within our cleaned reads. This will help us obtain a better understanding of the gut microbiome composition in both healthy patients and COVID 19 patients across the two tested levels of severity: Mild and Severe. Metrics analyzed in R include relative abundance, richness, Shannon diversity index and Simpson index. These metrics are slightly different from those analyzed in the original Li et al., study and can hopefully provide a more nuanced perspective of gut microbiome composition following COVID-19 infection of different severity.  
 
 # R Analysis 
 ```
